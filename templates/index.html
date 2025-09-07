@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Ganesh Ji — Divine Guide</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Background Music (Optional) -->
+  <audio id="background-music" loop preload="auto" autoplay playsinline>
+    <source src="/static/strotram.mp3" type="audio/mpeg">
+    <source src="/static/strotram.ogg" type="audio/ogg">
+  </audio>
+
+  <!-- Background video -->
+  <video autoplay muted loop id="bg-video" playsinline>
+    <source src="/static/space-bg.mp4" type="video/mp4">
+  </video>
+
+  <!-- Floating particles for ambiance -->
+  <div class="ambient-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Ganesh Image with Divine Aura -->
+    <div class="ganesh-container">
+      <div class="divine-aura"></div>
+      <div class="inner-glow"></div>
+      <img id="ganesh-img" src="/static/ganesh.png" alt="Lord Ganesh" />
+      <img id="ganesh-overlay" class="ganesh-overlay" src="/static/ganesh2.gif" alt="Ganesh overlay" />
+      <div class="energy-rings">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+      <!-- Soft blessing particles -->
+      <div class="blessing-particles" aria-hidden="true">
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+        <span class="sparkle"></span>
+      </div>
+      <!-- Continuous circular light disks -->
+      <div class="light-disks" aria-hidden="true">
+        <div class="disk"></div>
+        <div class="disk"></div>
+        <div class="disk"></div>
+        <div class="disk"></div>
+        <div class="disk"></div>
+        <div class="disk"></div>
+      </div>
+    </div>
+
+    <!-- Title removed to maximize space for Ganesh image -->
+
+    <!-- Minimal Language Control -->
+    <div class="language-selector top">
+      <select id="lang" class="minimal-select">
+        <option value="hi">हिन्दी</option>
+        <option value="kn">ಕನ್ನಡ</option>
+        <option value="en" selected>English</option>
+      </select>
+    </div>
+
+    <!-- Voice Status Indicator -->
+    <div class="voice-status">
+      <div class="status-circle" id="statusCircle">
+        <div class="status-pulse"></div>
+      </div>
+      <p class="status-text" id="statusText">Say "Hey Ganesh" to begin</p>
+    </div>
+
+    <!-- Conversation Log (small, white text) -->
+    <div id="conversationLog" class="conversation-log" aria-live="polite"></div>
+
+    <!-- Manual text input (optional) -->
+    <form id="textAskForm" class="text-ask" autocomplete="off">
+      <input id="textAskInput" class="text-ask-input" type="text" placeholder="Type your question here..." />
+      <button class="text-ask-btn" type="submit">Ask</button>
+    </form>
+
+    <!-- YouTube Embedded Player -->
+    <div id="yt-embed" class="yt-container" hidden>
+      <div id="yt-player"></div>
+    </div>
+
+    <!-- Floating Controls (moved aside) -->
+    <div class="floating-controls">
+      <button id="toggleWake" class="divine-button small">
+        <span class="button-text">Start</span>
+      </button>
+      <button id="stopAll" class="divine-button secondary small" disabled>
+        <span class="button-text">Stop</span>
+      </button>
+      <button id="musicToggle" class="music-btn" title="Music">
+        <span class="music-icon">🎵</span>
+      </button>
+    </div>
+  </main>
+
+  <script src="/static/script.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>

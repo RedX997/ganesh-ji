@@ -1,0 +1,9 @@
+flask
+flask-cors
+python-dotenv
+openai
+google-generativeai
+pytube
+
+
+
