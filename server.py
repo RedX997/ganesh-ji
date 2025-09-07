@@ -11,7 +11,10 @@ app = Flask(__name__)
 # Support both GOOGLE_API_KEY and GEMINI_API_KEY for convenience
 api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
 if not api_key:
-    raise RuntimeError("Missing API key. Set GOOGLE_API_KEY or GEMINI_API_KEY in your environment.")
+    print("Warning: No API key found. Set GOOGLE_API_KEY or GEMINI_API_KEY environment variable.")
+    print("The app will start but AI features will not work until API key is provided.")
+    api_key = "dummy_key"  # Allow app to start without API key
+
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
@@ -83,6 +86,10 @@ User question: {user_question}
 
         prompt = short_prompt if is_short_input else long_prompt
 
+        # Check if API key is valid
+        if api_key == "dummy_key":
+            return jsonify({"answer": "API key not configured. Please set GOOGLE_API_KEY environment variable."})
+        
         response = model.generate_content(prompt)
         answer = response.text
         return jsonify({"answer": answer})
