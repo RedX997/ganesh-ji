@@ -3,6 +3,11 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 from pytube import Search
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -130,4 +135,16 @@ def serve_static(filename):
     return send_from_directory('static', filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    host = os.environ.get('HOST', '0.0.0.0')
+    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
+    
+    logger.info(f"Starting Flask app on {host}:{port}")
+    logger.info(f"Debug mode: {debug}")
+    logger.info(f"API key configured: {api_key != 'dummy_key'}")
+    
+    try:
+        app.run(host=host, port=port, debug=debug)
+    except Exception as e:
+        logger.error(f"Failed to start Flask app: {e}")
+        raise
