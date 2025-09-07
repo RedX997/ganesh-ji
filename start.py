@@ -38,8 +38,24 @@ def main():
         from server import app
         logger.info("Flask app imported successfully")
         
-        logger.info("Starting Flask application...")
-        app.run(host=host, port=port, debug=debug)
+        if debug:
+            logger.info("Starting Flask development server...")
+            app.run(host=host, port=port, debug=debug)
+        else:
+            logger.info("Starting Gunicorn production server...")
+            import gunicorn.app.wsgiapp as wsgi
+            sys.argv = [
+                'gunicorn',
+                '--bind', f'{host}:{port}',
+                '--workers', '2',
+                '--timeout', '120',
+                '--keep-alive', '2',
+                '--max-requests', '1000',
+                '--max-requests-jitter', '100',
+                '--preload',
+                'server:app'
+            ]
+            wsgi.run()
         
     except Exception as e:
         logger.error(f"Failed to start application: {e}")
