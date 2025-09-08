@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from pytube import Search
 import logging
+import itertools # Import itertools for cycling through API keys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -13,14 +14,25 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Support both GOOGLE_API_KEY and GEMINI_API_KEY for convenience
-api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
-if not api_key:
-    print("Warning: No API key found. Set GOOGLE_API_KEY or GEMINI_API_KEY environment variable.")
-    print("The app will start but AI features will not work until API key is provided.")
-    api_key = "dummy_key"  # Allow app to start without API key
+# List of Gemini API keys
+# Make sure to replace these with your actual keys from environment variables in a production environment
+API_KEYS = [
+    os.getenv("GOOGLE_API_KEY_1", "AIzaSyAYTa00_34Xh66OTbQC4NstS8o45XLzq-U"),
+    os.getenv("GOOGLE_API_KEY_2", "AIzaSyDmnFNknkVkGRpUUP-syok6yDuWkVjro8c"),
+    # Add more keys as needed
+]
 
-genai.configure(api_key=api_key)
+# Create an iterator that cycles through the API keys
+api_key_cycle = itertools.cycle(API_KEYS)
+
+# Function to get the next API key
+def get_next_api_key():
+    return next(api_key_cycle)
+
+# Initial configuration with the first API key (will be updated per request)
+# This initial configuration is mainly to ensure genai is set up,
+# but the key will be dynamically picked in `ask_ganesh`
+genai.configure(api_key=get_next_api_key())
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.route('/')
@@ -91,9 +103,12 @@ User question: {user_question}
 
         prompt = short_prompt if is_short_input else long_prompt
 
-        # Check if API key is valid
-        if api_key == "dummy_key":
-            return jsonify({"answer": "API key not configured. Please set GOOGLE_API_KEY environment variable."})
+        # Dynamically configure genai with the next API key for each request
+        current_api_key = get_next_api_key()
+        if not current_api_key or current_api_key == "dummy_key":
+            return jsonify({"answer": "API key not configured. Please set GOOGLE_API_KEY_1 or GOOGLE_API_KEY_2 environment variable."})
+        
+        genai.configure(api_key=current_api_key)
         
         response = model.generate_content(prompt)
         answer = response.text
@@ -141,7 +156,7 @@ if __name__ == '__main__':
     
     logger.info(f"Starting Flask app on {host}:{port}")
     logger.info(f"Debug mode: {debug}")
-    logger.info(f"API key configured: {api_key != 'dummy_key'}")
+    logger.info(f"API keys configured: {len(API_KEYS)} keys loaded.") # Updated log message
     
     try:
         app.run(host=host, port=port, debug=debug)
